@@ -1,7 +1,8 @@
-CC		= g++-mp-4.7
-GSL		= /opt/local/lib/libgsl.a /opt/local/lib/libgslcblas.a
+CC		= g++
+GSL		= ${GSL_HOME}/lib/libgsl.a
+GSL2            = ${GSL_HOME}/lib/libgslcblas.a
 CC_FLAGS	= -Wall -O3  -static-libgcc -static-libstdc++ -fopenmp -DHAVE_INLINE
-LD_FLAGS	= ${GSL} -fopenmp
+LD_FLAGS	= ${GSL} ${GSL2} -fopenmp
 prefobj		= emission.o common-functions.o
 filterHDobj	= emission.o common-functions.o jump-diffusion.o minimization.o
 cloneobj	= clone.o clone-bulk.o clone-prior.o clone-llh.o clone-predict.o clone-update.o clone-fwd-bwd.o
@@ -19,5 +20,3 @@ cloneHD: $(cloneHDobj) cloneHD.o
 	$(CC) $(CC_FLAGS) -c $< -o $@
 $(cloneobj): clone.h# $(cloneobj:.o=.cpp)
 $(filterHDobj) $(cloneHDobj) $(prefobj): $(.TARGET:.o=.h)
-clean:
-	rm -f ./*.o
